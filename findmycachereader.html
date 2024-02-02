@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Placemarks Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+body, html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    height: 100%;
+    width: 70%;
+    float: left;
+}
+
+#sidebar {
+    height: 100%;
+    width: 30%;
+    float: left;
+    background-color: #f2f2f2;
+    overflow-y: auto;
+}
+
+#file-input {
+    display: none;
+}
+
+#file-label {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.placemark-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.placemark-item:hover {
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+    #map, #sidebar {
+        width: 100%;
+        float: none;
+    }
+}
+button {
+    margin: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+    </style>
+</head>
+<body>
+    <label id="file-label" for="file-input">Select CSV File</label>
+    <span id="file-name"></span>
+    <input type="file" id="file-input" accept=".csv" style="display:none">
+    <!-- Add these buttons inside the <body> tag -->
+    <button id="hide-sidebar-btn">Hide Sidebar</button>
+    <button id="show-sidebar-btn" style="display:none;">Show Sidebar</button>
+
+    <div id="map"></div>
+
+    <div id="sidebar">
+        <h2>Placemarks</h2>
+        <ul id="placemark-list"></ul>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+document.getElementById('file-input').addEventListener('change', function(event) {
+    var file = event.target.files[0];
+    if (file) {
+        processCSVFile(file);
+    }
+});
+
+var map = L.map('map').setView([0, 0], 2);
+var markers = [];
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+function processCSVFile(file) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        var csvData = event.target.result;
+        try {
+            var placemarks = parseCSV(csvData);
+            clearMarkers();
+
+            addPlacemarksToMap(placemarks); // This function now returns the count
+            updateSidebar(placemarks);
+
+        } catch (error) {
+            console.error("Error processing CSV file: ", error);
+            alert("Error processing CSV file.");
+        }
+    };
+    reader.onerror = function() {
+        alert("Error reading file");
+    };
+    reader.readAsText(file);
+}
+
+function addPlacemarksToMap(placemarks) {
+    var addedCount = 0;
+    var discardedCount = 0;
+    var minDistance = 50; // 50 meters
+    var minTimeDiff = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+    placemarks.forEach(function(placemark) {
+        var currentCoord = [parseFloat(placemark['location|latitude']), parseFloat(placemark['location|longitude'])];
+        var currentTimeStamp = new Date(parseInt(placemark['location|timeStamp']));
+
+        var isTooClose = markers.some(function(marker) {
+            var existingCoord = marker.getLatLng();
+            var distance = L.latLng(currentCoord).distanceTo(existingCoord);
+            var existingTimeStamp = marker.options.timeStamp;
+            var timeDiff = Math.abs(currentTimeStamp - existingTimeStamp);
+
+            return distance < minDistance && timeDiff < minTimeDiff;
+        });
+
+        if (!isNaN(currentCoord[0]) && !isNaN(currentCoord[1]) && !isTooClose) {
+            var marker = L.marker(currentCoord).addTo(map);
+            marker.bindPopup("<b>" + placemark.name + "</b><br>Timestamp: " + currentTimeStamp.toLocaleString());
+            marker.options.timeStamp = currentTimeStamp; // Store timestamp in marker options for comparison
+            markers.push(marker);
+            addedCount++;
+        } else {
+            discardedCount++;
+        }
+    });
+    alert("Loaded " + addedCount + " pings. " + discardedCount + " Were discarded for performance reasons or errors")
+}
+
+
+
+function parseCSV(csvData) {
+    var rows = csvData.split('\n');
+    var headers = rows[0].split(',');
+    var placemarks = [];
+    for (var i = 1; i < rows.length; i++) {
+        var currentRow = rows[i].split(',');
+        if (currentRow.length === headers.length) {
+            var placemark = {};
+            for (var j = 0; j < headers.length; j++) {
+                placemark[headers[j].trim()] = currentRow[j].trim();
+            }
+            placemarks.push(placemark);
+        }
+    }
+    return placemarks;
+}
+
+function updateSidebar(placemarks) {
+    var placemarkList = document.getElementById('placemark-list');
+    placemarkList.innerHTML = '';
+
+    placemarks.forEach(function(placemark, i) {
+        var listItem = document.createElement('li');
+        listItem.className = 'placemark-item';
+        listItem.textContent = placemark.name + ' - ' + new Date(parseInt(placemark['location|timeStamp'])).toLocaleString();
+        listItem.onclick = function() {
+            focusOnPlacemark(placemark);
+        };
+        placemarkList.appendChild(listItem);
+    });
+}
+
+function focusOnPlacemark(placemark) {
+    var lat = parseFloat(placemark['location|latitude']);
+    var lon = parseFloat(placemark['location|longitude']);
+    map.panTo([lat, lon]);
+}
+
+function clearMarkers() {
+    markers.forEach(function(marker) {
+        map.removeLayer(marker);
+    });
+    markers = [];
+}
+
+document.getElementById('hide-sidebar-btn').addEventListener('click', function() {
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('map').style.width = '100%';
+    this.style.display = 'none';
+    document.getElementById('show-sidebar-btn').style.display = 'block';
+});
+
+document.getElementById('show-sidebar-btn').addEventListener('click', function() {
+    document.getElementById('sidebar').style.display = 'block';
+    document.getElementById('map').style.width = '70%';
+    this.style.display = 'none';
+    document.getElementById('hide-sidebar-btn').style.display = 'block';
+});
+
+
+    </script>
+</body>
+</html>
