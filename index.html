@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmer Portfolio</title>
+    <style>
+/* Reset some default styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header styling */
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Navigation styling */
+nav {
+    background-color: #444;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Style for the navigation links (tabs) */
+nav a {
+    text-decoration: none;
+    color: #fff;
+    margin: 0 20px;
+    padding: 10px 20px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Hover effect for the navigation links (tabs) */
+nav a:hover {
+    background-color: #333;
+    border-color: #fff;
+}
+
+/* Container styling */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* Section styling */
+.container section {
+    display: none; /* Hide all sections by default */
+}
+
+/* Show the 'about' section by default */
+#about {
+    display: block;
+}
+
+/* Project styling */
+.project {
+    margin: 20px 0;
+}
+
+/* Section headings */
+h2 {
+    margin: 10px 0;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Amir Y. Perehodnik</h1>
+        <p>Portfolio</p>
+    </header>
+    <nav>
+        <a href="#about" onclick="showSection('about')">About</a>
+        <a href="#projects" onclick="showSection('projects')">Projects</a>
+        <a href="#contact" onclick="showSection('contact')">Contact</a>
+    </nav>
+    <div class="container">
+        <section id="about">
+            <h2>About Me</h2>
+            <p>I am a passionate programmer and technology enthusiast with knowledge of Python, C# and Java.</p>
+        </section>
+        <section id="projects">
+            <h2>Projects</h2>
+            <hr>
+            <div class="project">
+                <h3>Minecraft Plugins</h3>
+                <p>I made several Plugins (server side mods) for Minecraft, specifically on Bukkit/Spigot/Paper based servers.</p>
+                <a href='https://github.com/amir16yp/SimpleLoginMessages'><h4>Simple Login Messages</h4></a>
+                <p>Customized login and logout messsages. Supports colors and player names, and if you have more than one configured, it will use a random one each time.</p>
+                <a href="https://github.com/amir16yp/AutoRoad"><h4>AutoRoad</h4></a>
+                <p>For creating customized paths and bridges in Minecraft with given materials, automatically. No shovel needed or fancy worldedit needed.</p>
+            </div>
+            <hr>
+            <div class="project">
+                <h3>Game mods</h3>
+                <p>I am currently learning to write mods for other games</p>
+                <a href="https://github.com/amir16yp/DictatorsNoPeaceCountryballs-mod"><h4>Dictators: No Peace Countryballs mod</h4></a>
+                <p>a mod for the game <a href="https://store.steampowered.com/app/1139890/DictatorsNo_Peace_Countryballs">Dictators: No Peace Countryballs</a>. Includes among other things, a cheat console with various cheats.</p>
+            </div>
+            <div class="project">
+                <h3>Python projects</h3>
+                <a href="https://github.com/amir16yp/dailyreleases"><h4>Dailyreleases bot</h4></a>
+                <p>I maintain this bot that searches for the dailyreleases of video games that were cracked. Used by <a href="https://old.reddit.com/r/crackwatch">r/crackwatch</a> mods to post daily releases threads. Also backups NFOs, see <a href="/dailyreleases/">here</a></p>
+            </div>
+
+        </section>
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <p>You can reach me at myrprhwdnyq ![ at ]! gmail DoT com</p>
+        </section>
+    </div>
+
+    <script>
+        // JavaScript function to show a specific section and hide others
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.container section');
+            sections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
