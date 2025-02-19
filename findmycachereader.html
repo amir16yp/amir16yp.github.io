@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)https://amir16yp.github.io/findmycachereader.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html>
+<head>
     <title>FindMy Log</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
@@ -38,15 +38,21 @@
             text-align: center;
         }
 
-        #file-label {
+        .file-label {
             display: block;
             background-color: #3498db;
             color: white;
             padding: 10px 20px;
             text-align: center;
             cursor: pointer;
-            margin: 10px 0;
+            margin: 10px;
             border-radius: 4px;
+        }
+
+        .file-type-selector {
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
         }
 
         .placemark-item {
@@ -58,13 +64,6 @@
 
         .placemark-item:hover {
             background-color: #f0f0f0;
-        }
-
-        @media (max-width: 768px) {
-            #map, #sidebar {
-                width: 100%;
-                float: none;
-            }
         }
 
         button {
@@ -84,233 +83,258 @@
             background-color: #45a049;
         }
 
-        /* Added additional CSS for the new button */
         #save-kml-btn {
             background-color: #3498db;
-            margin-top: 5px; /* Spacing from the button above it */
         }
 
         #save-kml-btn:hover {
-            background-color: #2980b9; /* Darker shade for hover state */
+            background-color: #2980b9;
+        }
+
+        .file-input {
+            display: none;
         }
     </style>
 </head>
-<body class="">
+<body>
     <div id="sidebar">
         <h2>FindMy Log</h2>
-        <label id="file-label" for="file-input">Select CSV File</label>
-        <input type="file" id="file-input" accept=".csv" style="display:none">
-        <button id="save-kml-btn" onclick="saveAsKML()">Save as KML</button>
+        <div class="file-type-selector">
+            <select id="file-type">
+                <option value="findmy">FindMy CSV</option>
+                <option value="airtag">AirTagAlex CSV</option>
+            </select>
+        </div>
+        <label class="file-label" for="file-input">Select CSV File</label>
+        <input type="file" id="file-input" class="file-input" accept=".csv">
+        <button id="save-kml-btn">Save as KML</button>
         <button id="hide-sidebar-btn">Hide Sidebar</button>
-        <!---- <button id="show-sidebar-btn">Show Sidebar</button> -->
-
+        <div id="stats"></div>
         <ul id="placemark-list"></ul>
     </div>
 
-    <div id="map" class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0" style="position: relative; outline: none;"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" role="presentation" src="./FindMy Log_files/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(550px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(806px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(550px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(806px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(550px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(806px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(294px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1062px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(294px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1062px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(550px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(806px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(294px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1062px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(294px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1062px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(38px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1318px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(38px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1318px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(38px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1318px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(38px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1318px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-218px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/1.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1574px, 227px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-218px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/2.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1574px, 483px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-218px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/0.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1574px, -29px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-218px, 739px, 0px); opacity: 1;"><img alt="" role="presentation" src="./FindMy Log_files/3.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(1574px, 739px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-overlay-pane"></div><div class="leaflet-pane leaflet-marker-pane"></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(512px, 512px, 0px) scale(2);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="https://amir16yp.github.io/findmycachereader.html#" title="Zoom in" role="button" aria-label="Zoom in">+</a><a class="leaflet-control-zoom-out" href="https://amir16yp.github.io/findmycachereader.html#" title="Zoom out" role="button" aria-label="Zoom out">−</a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"><div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com/" title="A JS library for interactive maps">Leaflet</a> | © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</div></div></div></div>
-    
-
+    <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-document.getElementById('file-input').addEventListener('change', function(event) {
-    var file = event.target.files[0];
-    if (file) {
-        processCSVFile(file);
-    }
-});
+        let map = L.map('map').setView([0, 0], 2);
+        let markers = [];
+        let deviceName = "";
+        let deviceId = "";
 
-var map = L.map('map').setView([0, 0], 2);
-var markers = [];
-var deviceName = "";
-var deviceId = "";
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-function processCSVFile(file) {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-        var csvData = event.target.result;
-        try {
-            var placemarks = parseCSV(csvData);
-            clearMarkers();
-
-            addPlacemarksToMap(placemarks); // This function now returns the count
-            updateSidebar();
-
-        } catch (error) {
-            console.error("Error processing CSV file: ", error);
-            alert("Error processing CSV file.");
-        }
-    };
-    reader.onerror = function() {
-        alert("Error reading file");
-    };
-    reader.readAsText(file);
-}
-
-function addPlacemarksToMap(placemarks) {
-    var addedCount = 0;
-    var discardedCount = 0;
-    var minDistance = 50; // 50 meters
-    var minTimeDiff = 30 * 60 * 1000; // 30 minutes in milliseconds
-
-    placemarks.forEach(function(placemark) {
-        var currentCoord = [parseFloat(placemark['location|latitude']), parseFloat(placemark['location|longitude'])];
-    var currentTimeStamp = new Date(parseInt(placemark['location|timeStamp']));
-
-        var isTooClose = markers.some(function(marker) {
-            var existingCoord = marker.getLatLng();
-            var distance = L.latLng(currentCoord).distanceTo(existingCoord);
-            var existingTimeStamp = marker.options.timeStamp;
-            var timeDiff = Math.abs(currentTimeStamp - existingTimeStamp);
-
-            return distance < minDistance && timeDiff < minTimeDiff;
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileType = document.getElementById('file-type').value;
+                processCSVFile(file, fileType);
+            }
         });
 
-        if (!isNaN(currentCoord[0]) && !isNaN(currentCoord[1]) && !isTooClose) {
-            var marker = L.marker(currentCoord).addTo(map);
-            marker.bindPopup("<b>" + placemark.name + "</b><br>Timestamp: " + currentTimeStamp.toLocaleString());
-            marker.options.timeStamp = currentTimeStamp; // Store timestamp in marker options for comparison
-            markers.push(marker);
-            addedCount++;
-        } else {
-            discardedCount++;
+        function processCSVFile(file, fileType) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const csvData = event.target.result;
+                try {
+                    const placemarks = fileType === 'findmy' ? 
+                        parseFindMyCSV(csvData) : 
+                        parseAirTagCSV(csvData);
+                    
+                    clearMarkers();
+                    addPlacemarksToMap(placemarks);
+                    updateSidebar();
+                } catch (error) {
+                    console.error("Error processing CSV file: ", error);
+                    alert("Error processing CSV file: " + error.message);
+                }
+            };
+            reader.readAsText(file);
         }
-    });
-    alert("Loaded " + addedCount + " pings. " + discardedCount + " Were discarded for performance reasons or errors")
-}
 
-
-function saveAsKML() {
-    if (markers.length === 0) {
-        alert('No pings to save.');
-        return;
-    }
-
-    var kmlDocumentStart = '<?xml version="1.0" encoding="UTF-8"?>' +
-        '<kml xmlns="http://www.opengis.net/kml/2.2">' +
-        '<Document><name>Placemarks</name>';
-
-    var kmlDocumentEnd = '</Document></kml>';
-
-    var placemarkKML = '';
-
-    markers.forEach(function(marker) {
-        var latLng = marker.getLatLng();
-        var name = marker.getPopup().getContent();
-        
-        placemarkKML += '<Placemark><name>' + escapeXML(name) + '</name>' +
-            '<Point><coordinates>' + latLng.lng + ',' + latLng.lat + ',0</coordinates></Point>' +
-            '</Placemark>';
-    });
-
-    var finalKML = kmlDocumentStart + placemarkKML + kmlDocumentEnd;
-
-    downloadKMLFile(finalKML);
-}
-
-function escapeXML(str) {
-    return str.replace(/[<>&'"]/g, function (c) {
-        switch (c) {
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '&': return '&amp;';
-            case '\'': return '&apos;';
-            case '"': return '&quot;';
-        }
-    });
-}
-
-function downloadKMLFile(kmlData) {
-    var blob = new Blob([kmlData], {type: 'application/vnd.google-earth.kml+xml'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = deviceName + '.kml';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-
-function parseCSV(csvData) {
-    var rows = csvData.split('\n');
-    var headers = rows[0].split(',');
-    var placemarks = [];
-    for (var i = 1; i < rows.length; i++) {
-        var currentRow = rows[i].split(',');
-        if (i == 1) // this would make it run only once
-        {   
-            deviceName = currentRow[currentRow.length - 3];
-            deviceId = currentRow[7];
-        }
-        if (currentRow.length === headers.length) {
-            var placemark = {};
-            for (var j = 0; j < headers.length; j++) {
-                placemark[headers[j].trim()] = currentRow[j].trim();
+        function parseFindMyCSV(csvData) {
+            const rows = csvData.split('\n');
+            const headers = rows[0].split(',');
+            const placemarks = [];
+            
+            for (let i = 1; i < rows.length; i++) {
+                const currentRow = rows[i].split(',');
+                if (currentRow.length === headers.length) {
+                    if (i === 1) {
+                        deviceName = currentRow[currentRow.length - 3];
+                        deviceId = currentRow[7];
+                    }
+                    
+                    const placemark = {};
+                    headers.forEach((header, index) => {
+                        placemark[header.trim()] = currentRow[index].trim();
+                    });
+                    placemarks.push(placemark);
+                }
             }
-            placemarks.push(placemark);
+            return placemarks;
         }
-    }
-    return placemarks;
-}
 
-function updateSidebar() {
-    var placemarkList = document.getElementById('placemark-list');
-    placemarkList.innerHTML = '';
+        function parseAirTagCSV(csvData) {
+            const rows = csvData.split('\n');
+            const headers = rows[0].split(',');
+            const placemarks = [];
+            
+            for (let i = 1; i < rows.length; i++) {
+                const currentRow = rows[i].split(',');
+                if (currentRow.length === headers.length) {
+                    const placemark = {};
+                    headers.forEach((header, index) => {
+                        placemark[header.trim()] = currentRow[index].trim();
+                    });
+                    
+                    // Map AirTag CSV fields to FindMy format for compatibility
+                    placemark['location|latitude'] = placemark['locationlatitude'];
+                    placemark['location|longitude'] = placemark['locationlongitude'];
+                    placemark['location|timeStamp'] = new Date(placemark['datetime']).getTime();
+                    placemark['name'] = placemark['name'] || 'AirTag';
+                    
+                    placemarks.push(placemark);
+                }
+            }
+            return placemarks;
+        }
 
-    markers.forEach(function(marker, i) {
-        var name = marker.getPopup().getContent();
-        var timeStamp = marker.options.timeStamp;
-        var listItem = document.createElement('li');
-        listItem.className = 'placemark-item';
-        listItem.textContent = name + ' - ' + new Date(timeStamp).toLocaleString();
-        listItem.onclick = function() {
-            focusOnMarker(marker);
-        };
-        placemarkList.appendChild(listItem);
-    });
-}
+        function addPlacemarksToMap(placemarks) {
+            const minDistance = 50; // 50 meters
+            const minTimeDiff = 30 * 60 * 1000; // 30 minutes
+            let addedCount = 0;
+            let discardedCount = 0;
 
-function focusOnPlacemark(placemark) {
-    var lat = parseFloat(placemark['location|latitude']);
-    var lon = parseFloat(placemark['location|longitude']);
-    map.panTo([lat, lon]);
-}
+            placemarks.forEach(function(placemark) {
+                const lat = parseFloat(placemark['location|latitude']);
+                const lng = parseFloat(placemark['location|longitude']);
+                const timestamp = new Date(parseInt(placemark['location|timeStamp']));
 
-function clearMarkers() {
-    markers.forEach(function(marker) {
-        map.removeLayer(marker);
-    });
-    markers = [];
-}
+                if (isNaN(lat) || isNaN(lng)) {
+                    discardedCount++;
+                    return;
+                }
 
-function hideSidebar()
-{
-    document.getElementById('sidebar').style.display = 'none';
-    document.getElementById('map').style.width = '100%';
-    //this.style.display = 'none';
-    document.getElementById('show-sidebar-btn').style.display = 'block';
-}
+                const isTooClose = markers.some(function(marker) {
+                    const existingLatLng = marker.getLatLng();
+                    const distance = L.latLng([lat, lng]).distanceTo(existingLatLng);
+                    const timeDiff = Math.abs(timestamp - marker.options.timeStamp);
+                    return distance < minDistance && timeDiff < minTimeDiff;
+                });
 
-document.getElementById('hide-sidebar-btn').addEventListener('click', hideSidebar);
+                if (!isTooClose) {
+                    const marker = L.marker([lat, lng]).addTo(map);
+                    marker.bindPopup(`<b>${placemark.name}</b><br>Timestamp: ${timestamp.toLocaleString()}`);
+                    marker.options.timeStamp = timestamp;
+                    markers.push(marker);
+                    addedCount++;
+                } else {
+                    discardedCount++;
+                }
+            });
 
-function showSidebar()
-{
-    document.getElementById('sidebar').style.display = 'block';
-    //document.getElementById('map').style.width = '100%';
-    //this.style.display = 'none';
-    document.getElementById('hide-sidebar-btn').style.display = 'block';
-}
+            // Update statistics
+            document.getElementById('stats').innerHTML = `
+                <div style="padding: 10px; background: #f0f0f0; margin: 10px;">
+                    <p>Loaded: ${addedCount} points</p>
+                    <p>Discarded: ${discardedCount} points</p>
+                </div>
+            `;
 
-document.getElementById('show-sidebar-btn').addEventListener('click', showSidebar);
+            // Fit map to markers
+            if (markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds());
+            }
+        }
 
+        function saveAsKML() {
+            if (markers.length === 0) {
+                alert('No points to save.');
+                return;
+            }
 
+            const kml = [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<kml xmlns="http://www.opengis.net/kml/2.2">',
+                '<Document>',
+                '<name>Location History</name>'
+            ];
+
+            markers.forEach(function(marker) {
+                const latLng = marker.getLatLng();
+                const popup = marker.getPopup();
+                const content = popup ? popup.getContent() : 'Location Point';
+                
+                kml.push(
+                    '<Placemark>',
+                    `<name>${escapeXML(content)}</name>`,
+                    '<Point>',
+                    `<coordinates>${latLng.lng},${latLng.lat},0</coordinates>`,
+                    '</Point>',
+                    '</Placemark>'
+                );
+            });
+
+            kml.push('</Document>', '</kml>');
+            
+            const blob = new Blob([kml.join('\n')], {type: 'application/vnd.google-earth.kml+xml'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${deviceName || 'location-history'}.kml`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function escapeXML(str) {
+            return str.replace(/[<>&'"]/g, function (c) {
+                switch (c) {
+                    case '<': return '&lt;';
+                    case '>': return '&gt;';
+                    case '&': return '&amp;';
+                    case '\'': return '&apos;';
+                    case '"': return '&quot;';
+                }
+            });
+        }
+
+        function updateSidebar() {
+            const placemarkList = document.getElementById('placemark-list');
+            placemarkList.innerHTML = '';
+
+            markers.forEach(function(marker) {
+                const listItem = document.createElement('li');
+                listItem.className = 'placemark-item';
+                const popupContent = marker.getPopup().getContent();
+                listItem.innerHTML = popupContent;
+                listItem.onclick = () => {
+                    map.setView(marker.getLatLng(), map.getZoom());
+                    marker.openPopup();
+                };
+                placemarkList.appendChild(listItem);
+            });
+        }
+
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+
+        document.getElementById('hide-sidebar-btn').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const map = document.getElementById('map');
+            sidebar.style.display = 'none';
+            map.style.width = '100%';
+            map.invalidateSize();
+        });
+
+        document.getElementById('save-kml-btn').addEventListener('click', saveAsKML);
     </script>
-
-
-</body></html>
+</body>
+</html>
