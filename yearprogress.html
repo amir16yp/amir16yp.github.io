@@ -176,6 +176,17 @@
             height: 10px;
             opacity: 0;
         }
+
+        /* Added styles for reset animation */
+        @keyframes yearReset {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .reset-animation {
+            animation: yearReset 1.5s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -205,13 +216,28 @@
                 <div class="card-title">Current Year</div>
                 <div class="card-value" id="current-year">2023</div>
             </div>
+            <div class="card">
+                <div class="card-title">Current Time</div>
+                <div class="card-value" id="current-time">00:00:00</div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Track if we've already triggered the 100% animation
+        let hasTriggered100Percent = false;
+        let lastYear = new Date().getFullYear();
+        
         function updateYearProgress() {
             const now = new Date();
             const currentYear = now.getFullYear();
+            
+            // Check if we've moved to a new year
+            if (currentYear > lastYear) {
+                hasTriggered100Percent = false;
+                lastYear = currentYear;
+            }
+            
             const startOfYear = new Date(currentYear, 0, 1);
             const endOfYear = new Date(currentYear, 11, 31, 23, 59, 59, 999);
             
@@ -219,12 +245,25 @@
             const elapsedMilliseconds = now - startOfYear;
             
             const percentComplete = (elapsedMilliseconds / totalMilliseconds) * 100;
-            const roundedPercent = percentComplete.toFixed(2);
             
+            // Increase precision to show more decimal places
+            const roundedPercent = percentComplete.toFixed(8);
+            
+            // Fix day calculation - use more precise method
             const millisecondsInDay = 1000 * 60 * 60 * 24;
             const totalDays = Math.ceil(totalMilliseconds / millisecondsInDay);
-            const elapsedDays = Math.floor(elapsedMilliseconds / millisecondsInDay);
-            const remainingDays = totalDays - elapsedDays;
+            
+            // Calculate days passed including the current day
+            const startDate = new Date(currentYear, 0, 1);
+            const daysPassed = Math.floor((now - startDate) / millisecondsInDay) + 1;
+            
+            // Calculate remaining days
+            const remainingDays = totalDays - daysPassed;
+            
+            // Calculate hours, minutes, seconds
+            const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000) % 60;
+            const elapsedMinutes = Math.floor(elapsedMilliseconds / (1000 * 60)) % 60;
+            const elapsedHours = Math.floor(elapsedMilliseconds / (1000 * 60 * 60)) % 24;
             
             // Get previous values for animation
             const prevPercentage = parseFloat(document.getElementById('percentage').textContent) || 0;
@@ -236,12 +275,12 @@
             document.getElementById('progress-fill').style.width = `${percentComplete}%`;
             
             // Animate counters only if values have changed
-            if (Math.floor(elapsedDays) !== prevDaysPassed) {
-                animateValue(document.getElementById('days-passed'), prevDaysPassed, elapsedDays, 1000);
+            if (daysPassed !== prevDaysPassed) {
+                document.getElementById('days-passed').textContent = daysPassed;
             }
             
-            if (Math.floor(remainingDays) !== prevDaysRemaining) {
-                animateValue(document.getElementById('days-remaining'), prevDaysRemaining, remainingDays, 1000);
+            if (remainingDays !== prevDaysRemaining) {
+                document.getElementById('days-remaining').textContent = remainingDays;
             }
             
             document.getElementById('current-year').textContent = currentYear;
@@ -255,21 +294,45 @@
                 }, 2000);
             }
             
-            // Trigger confetti at certain milestones (10%, 25%, 50%, 75%, 100%)
-            const milestones = [10, 25, 50, 75, 100];
+            // Trigger confetti at certain milestones (10%, 25%, 50%, 75%)
+            const milestones = [10, 25, 50, 75];
             for (const milestone of milestones) {
                 if (prevPercentage < milestone && percentComplete >= milestone) {
                     createConfetti();
                     break;
                 }
             }
+            
+            // Special animation for 100% completion
+            if (percentComplete >= 99.99 && !hasTriggered100Percent) {
+                // Apply reset animation to container
+                const container = document.querySelector('.container');
+                container.classList.add('reset-animation');
+                setTimeout(() => {
+                    container.classList.remove('reset-animation');
+                }, 1500);
+                
+                // Create extra confetti
+                createConfetti(200);
+                
+                hasTriggered100Percent = true;
+            }
+            
+            // Update time display if it exists
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                const formattedHours = String(elapsedHours).padStart(2, '0');
+                const formattedMinutes = String(elapsedMinutes).padStart(2, '0');
+                const formattedSeconds = String(elapsedSeconds).padStart(2, '0');
+                timeElement.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+            }
         }
         
-        // Add confetti animation
-        function createConfetti() {
+        // Update createConfetti to accept a count parameter
+        function createConfetti(count = 100) {
             const container = document.getElementById('confetti-container');
             const colors = ['#00d2ff', '#3a7bd5', '#ffffff', '#fdbb2d', '#b21f1f'];
-            const confettiCount = 100;
+            const confettiCount = count;
             
             container.innerHTML = '';
             
@@ -329,6 +392,19 @@
         
         // Initialize animations
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if time display already exists before adding it
+            if (!document.getElementById('current-time')) {
+                // Add time display to the details section
+                const detailsSection = document.querySelector('.details');
+                const timeCard = document.createElement('div');
+                timeCard.className = 'card';
+                timeCard.innerHTML = `
+                    <div class="card-title">Current Time</div>
+                    <div class="card-value" id="current-time">00:00:00</div>
+                `;
+                detailsSection.appendChild(timeCard);
+            }
+            
             // Initial animations for cards
             const cards = document.querySelectorAll('.card');
             cards.forEach((card, index) => {
@@ -339,9 +415,9 @@
                 }, 300 + index * 200);
             });
             
-            // Update immediately and then every second
+            // Update immediately and then every 100 milliseconds for smoother updates
             updateYearProgress();
-            setInterval(updateYearProgress, 1000);
+            setInterval(updateYearProgress, 100);
         });
     </script>
 </body>
