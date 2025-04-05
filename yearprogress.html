@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year Progress</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 600px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .progress-container {
+            margin: 40px 0;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 15px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .percentage {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .percentage::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            transform: translateX(-50%);
+            transition: width 0.5s ease;
+        }
+
+        .percentage:hover::after {
+            width: 80%;
+        }
+
+        .details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            margin: 0 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .card-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        /* Added styles for new animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti-container" id="confetti-container"></div>
+    
+    <div class="container">
+        <h1>Year Progress</h1>
+        
+        <div class="percentage" id="percentage">0%</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="details">
+            <div class="card">
+                <div class="card-title">Days Passed</div>
+                <div class="card-value" id="days-passed">0</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Days Remaining</div>
+                <div class="card-value" id="days-remaining">0</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Current Year</div>
+                <div class="card-value" id="current-year">2023</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateYearProgress() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const startOfYear = new Date(currentYear, 0, 1);
+            const endOfYear = new Date(currentYear, 11, 31, 23, 59, 59, 999);
+            
+            const totalMilliseconds = endOfYear - startOfYear;
+            const elapsedMilliseconds = now - startOfYear;
+            
+            const percentComplete = (elapsedMilliseconds / totalMilliseconds) * 100;
+            const roundedPercent = percentComplete.toFixed(2);
+            
+            const millisecondsInDay = 1000 * 60 * 60 * 24;
+            const totalDays = Math.ceil(totalMilliseconds / millisecondsInDay);
+            const elapsedDays = Math.floor(elapsedMilliseconds / millisecondsInDay);
+            const remainingDays = totalDays - elapsedDays;
+            
+            // Get previous values for animation
+            const prevPercentage = parseFloat(document.getElementById('percentage').textContent) || 0;
+            const prevDaysPassed = parseInt(document.getElementById('days-passed').textContent) || 0;
+            const prevDaysRemaining = parseInt(document.getElementById('days-remaining').textContent) || 0;
+            
+            // Update with animations
+            document.getElementById('percentage').textContent = `${roundedPercent}%`;
+            document.getElementById('progress-fill').style.width = `${percentComplete}%`;
+            
+            // Animate counters only if values have changed
+            if (Math.floor(elapsedDays) !== prevDaysPassed) {
+                animateValue(document.getElementById('days-passed'), prevDaysPassed, elapsedDays, 1000);
+            }
+            
+            if (Math.floor(remainingDays) !== prevDaysRemaining) {
+                animateValue(document.getElementById('days-remaining'), prevDaysRemaining, remainingDays, 1000);
+            }
+            
+            document.getElementById('current-year').textContent = currentYear;
+            
+            // Add pulse effect when percentage changes significantly
+            if (Math.abs(percentComplete - prevPercentage) > 0.01) {
+                const percentElement = document.getElementById('percentage');
+                percentElement.classList.add('pulse');
+                setTimeout(() => {
+                    percentElement.classList.remove('pulse');
+                }, 2000);
+            }
+            
+            // Trigger confetti at certain milestones (10%, 25%, 50%, 75%, 100%)
+            const milestones = [10, 25, 50, 75, 100];
+            for (const milestone of milestones) {
+                if (prevPercentage < milestone && percentComplete >= milestone) {
+                    createConfetti();
+                    break;
+                }
+            }
+        }
+        
+        // Add confetti animation
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#00d2ff', '#3a7bd5', '#ffffff', '#fdbb2d', '#b21f1f'];
+            const confettiCount = 100;
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = -10 + 'px';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                container.appendChild(confetti);
+                
+                // Animate each confetti piece
+                animateConfetti(confetti);
+            }
+        }
+        
+        function animateConfetti(confetti) {
+            const duration = 3000 + Math.random() * 3000;
+            const initialLeft = parseFloat(confetti.style.left);
+            
+            confetti.animate([
+                { 
+                    top: '-10px', 
+                    left: initialLeft,
+                    opacity: 1,
+                    transform: `rotate(0deg) scale(1)`
+                },
+                { 
+                    top: '105vh', 
+                    left: `${initialLeft + (Math.random() * 20 - 10)}vw`,
+                    opacity: 0,
+                    transform: `rotate(${Math.random() * 720}deg) scale(0)`
+                }
+            ], {
+                duration: duration,
+                easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)',
+                fill: 'forwards'
+            });
+        }
+        
+        // Add number counter animation
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial animations for cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease';
+                    card.style.opacity = '1';
+                }, 300 + index * 200);
+            });
+            
+            // Update immediately and then every second
+            updateYearProgress();
+            setInterval(updateYearProgress, 1000);
+        });
+    </script>
+</body>
+</html>
