@@ -1,0 +1,6 @@
+This directory should contain your texture files:
+
+1. tileset.png - A tileset image containing all wall, floor, and other textures
+2. door1.png, door2.png, door3.png - Door textures for the door placement tool
+
+If these files are not present, the editor will generate placeholder textures. 

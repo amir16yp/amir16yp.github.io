@@ -1,0 +1,262 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+/* Layout */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.grid-container {
+    flex: 1;
+    overflow: auto;
+    background-color: #ddd;
+    border-right: 1px solid #ccc;
+}
+
+#gridCanvas {
+    background-color: white;
+}
+
+.sidebar {
+    width: 250px;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f0f0f0;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #444;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background-color: #666;
+    margin: 0 0.25rem;
+}
+
+.toolbar button, .color-btn {
+    padding: 5px 10px;
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.toolbar button:hover, .color-btn:hover {
+    background-color: #777;
+}
+
+.toolbar select {
+    padding: 5px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+.toolbar label {
+    color: white;
+    font-size: 0.9rem;
+}
+
+.toggle-btn.active {
+    background-color: #4CAF50;
+}
+
+/* Panels */
+.panel {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.panel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+/* Texture Grid */
+.texture-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.texture-item {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: #eee;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.texture-item.selected {
+    border-color: #ff4500;
+}
+
+.texture-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Property Groups */
+.property-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    gap: 0.5rem;
+}
+
+.property-group label {
+    width: 80px;
+}
+
+.property-group select {
+    flex: 1;
+    padding: 5px;
+}
+
+.color-btn {
+    width: 60px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid #ccc;
+}
+
+/* Dialogs */
+dialog {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 0;
+}
+
+.dialog-content {
+    padding: 1.5rem;
+}
+
+.dialog-content h2 {
+    margin-bottom: 1rem;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.dialog-buttons button {
+    padding: 5px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.dialog-buttons button:hover {
+    background-color: #45a049;
+}
+
+#cancelColorBtn, #cancelDoorBtn {
+    background-color: #666;
+}
+
+#cancelColorBtn:hover, #cancelDoorBtn:hover {
+    background-color: #777;
+}
+
+/* Door Texture Dialog */
+.door-options {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.door-option {
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 0.5rem;
+    border-radius: 3px;
+}
+
+.door-option.selected {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.door-option img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Status Bar */
+#statusBar {
+    font-family: monospace;
+} 

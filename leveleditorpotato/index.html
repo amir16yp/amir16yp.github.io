@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potato Level Editor</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Potato Level Editor</h1>
+            <div class="toolbar">
+                <!-- File Operations -->
+                <div class="toolbar-group">
+                    <button id="newBtn">New</button>
+                    <button id="wolfensteinBtn">Wolfenstein Level</button>
+                    <button id="openBtn">Open</button>
+                    <button id="saveBtn">Save</button>
+                    <button id="saveZipBtn">Save as ZIP</button>
+                </div>
+                <div class="divider"></div>
+
+                <!-- Layers -->
+                <div class="toolbar-group">
+                    <button id="wallLayerBtn" class="toggle-btn active">Wall Layer</button>
+                    <button id="floorLayerBtn" class="toggle-btn">Floor Layer</button>
+                </div>
+                <div class="divider"></div>
+
+                <!-- Tools -->
+                <div class="toolbar-group">
+                    <button id="eraseBtn" class="toggle-btn">Erase</button>
+                    <button id="fillBtn" class="toggle-btn">Fill</button>
+                    <button id="spawnBtn" class="toggle-btn">Place Spawn</button>
+                </div>
+                <div class="divider"></div>
+
+                <!-- Entity Tools -->
+                <div class="toolbar-group">
+                    <label for="entityTypeSelect">Entity Type:</label>
+                    <select id="entityTypeSelect">
+                        <option value="potato.entities.EnemyEntity:rookie">Rookie</option>
+                        <option value="potato.entities.EnemyEntity:hamasnik">Hamasnik</option>
+                        <option value="potato.entities.EnemyEntity:nukhba">Nukhba</option>
+                        <option value="potato.entities.EnemyEntity:sinwar">Sinwar</option>
+                    </select>
+                    <button id="entityBtn" class="toggle-btn">Place Entity</button>
+                </div>
+                <div class="divider"></div>
+
+                <!-- Door Tool -->
+                <div class="toolbar-group">
+                    <button id="doorBtn" class="toggle-btn">Place Door</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="grid-container">
+                <canvas id="gridCanvas"></canvas>
+            </div>
+            
+            <div class="sidebar">
+                <!-- Textures Panel -->
+                <div class="panel">
+                    <h2>Textures</h2>
+                    <div id="texturePanel" class="texture-grid"></div>
+                </div>
+                
+                <!-- Properties Panel -->
+                <div class="panel">
+                    <h2>Level Properties</h2>
+                    
+                    <div class="property-group">
+                        <label>Floor:</label>
+                        <button id="floorColorBtn" class="color-btn">Color</button>
+                        <select id="floorTextureCombo">
+                            <option value="">None</option>
+                            <!-- Will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="property-group">
+                        <label>Ceiling:</label>
+                        <button id="ceilingColorBtn" class="color-btn">Color</button>
+                        <select id="ceilingTextureCombo">
+                            <option value="">None</option>
+                            <!-- Will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="property-group">
+                        <label>Fog:</label>
+                        <button id="fogColorBtn" class="color-btn">Color</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div id="statusBar">Ready</div>
+        </footer>
+    </div>
+
+    <!-- Dialogs -->
+    <dialog id="colorPickerDialog">
+        <div class="dialog-content">
+            <h2>Select Color</h2>
+            <input type="color" id="colorPicker">
+            <div class="dialog-buttons">
+                <button id="confirmColorBtn">OK</button>
+                <button id="cancelColorBtn">Cancel</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="doorTextureDialog">
+        <div class="dialog-content">
+            <h2>Select Door Texture</h2>
+            <div class="door-options">
+                <div class="door-option">
+                    <img data-texture-id="1" src="textures/door1.png" alt="Dirty Door">
+                    <span>Dirty Door</span>
+                </div>
+                <div class="door-option">
+                    <img data-texture-id="2" src="textures/door2.png" alt="Metal Door">
+                    <span>Metal Door</span>
+                </div>
+                <div class="door-option">
+                    <img data-texture-id="3" src="textures/door3.png" alt="Wood Door">
+                    <span>Wood Door</span>
+                </div>
+            </div>
+            <div class="dialog-buttons">
+                <button id="confirmDoorBtn">OK</button>
+                <button id="cancelDoorBtn">Cancel</button>
+            </div>
+        </div>
+    </dialog>
+
+    <input type="file" id="fileInput" style="display: none;" accept=".csv,.zip,.json">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/constants.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/textures.js"></script>
+    <script src="js/level-data.js"></script>
+    <script src="js/level-generator.js"></script>
+    <script src="js/file-operations.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
