@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rectum Firmware</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { max-width: 52rem; margin: 3rem auto; padding: 0 1.25rem;
+           font: 1rem/1.65 system-ui, sans-serif; }
+    h1, h2, h3 { line-height: 1.25; }
+    h3 { margin-top: 2rem; }
+    a { color: light-dark(#0758b0, #8ac4ff); }
+    .download { display: inline-block; padding: .8rem 1.2rem; border-radius: .5rem;
+                 background: #0758b0; color: white; font-weight: 700; text-decoration: none; }
+    a:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
+    .build { overflow-wrap: anywhere; font-size: .9rem; }
+    pre { overflow-x: auto; }
+    img { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <main>
+    <section aria-label="Firmware download">
+      <a class="download" href="downloads/rectum-firmware-f7-update.tgz" download>Download Rectum Firmware</a>
+      <p>Flipper Zero (f7) update package. Install the downloaded .tgz file using
+         qFlipper's <strong>Install from file</strong> option.</p>
+      <p class="build">Build commit: <code>fa3b2238cd1ef5cf545deab5eadbdec76fa7dd1f</code></p>
+    </section>
+    <article>
+<h1 id="rectum-firmware">Rectum Firmware</h1>
+<h2 id="faq">FAQ</h2>
+<h3 id="what-is-rectum-firmware">What is Rectum Firmware?</h3>
+<p>Rectum is a fork of <a href="https://github.com/Next-Flip/Momentum-Firmware">Momentum Firmware</a> for the Flipper Zero. Credit for the foundation and inherited features belongs to the Momentum team and the upstream developers whose work it builds on.</p>
+<h3 id="why-did-you-make-this-fork">Why did you make this fork?</h3>
+<p>I made this fork because the Momentum team does not allow AI-assisted contributions. I wanted a place where I could work on fixes and accept contributions regardless of the tools used to write them.</p>
+<p>I mean no disrespect to the Momentum developers. I appreciate their work, but I disagree with their rigid rules around AI-assisted contributions.</p>
+<h3 id="what-does-this-fork-add">What does this fork add?</h3>
+<p>My changes mainly address memory issues: memory leaks, memory fragmentation, and other common C memory errors. The focus is on improving memory management and reliability.</p>
+<p>Unfortunately, these AI-assisted changes cannot go upstream under Momentum's contribution rules, so I maintain them here.</p>
+<h3 id="what-kinds-of-contributions-are-acceptable">What kinds of contributions are acceptable?</h3>
+<p>I do not care whether a human, an LLM, or a monkey randomly typing keys wrote a PR. I care whether the result is good.</p>
+<p>That still means having standards. A PR should:</p>
+<ul>
+<li>Solve a real problem and clearly explain the change.</li>
+<li>Be readable, maintainable, and consistent with the surrounding code.</li>
+<li>Handle memory ownership, allocation failures, and cleanup correctly where relevant.</li>
+<li>Include appropriate testing or other evidence that it works without introducing regressions.</li>
+<li>Come from someone who understands the change and can respond to review feedback.</li>
+</ul>
+<p>Using AI does not disqualify a contribution, and it does not excuse broken code or replace review.</p>
+<h3 id="why-did-you-name-it-rectum">why did you name it Rectum?</h3>
+<p>because le funny name</p>
+    </article>
+  </main>
+</body>
+</html>
