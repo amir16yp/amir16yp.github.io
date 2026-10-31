@@ -2,14 +2,16 @@ Skin Studio — static web build
 ==============================
 
 Built with base URL: /mcstudio/
+Public site URL: (not set — re-run with STUDIO_SITE_URL=https://your.domain for full SEO)
 
 Upload the *contents* of this folder to any static host
 (Netlify, Cloudflare Pages, GitHub Pages, S3, nginx, …).
 
 - Paint, layers, templates, share links, and download-save work in the browser.
-- Importing a PNG from disk / Mojang / mcskin.me needs the desktop app
-  (browser preview has no native file/network bridge).
-- Texture-pack browsing needs local vendor assets (desktop, or `pnpm dev`).
+- Texture-pack browsing uses the content-addressed pack in vendor/ (Range-streamed).
+- Importing a player skin by Mojang/mcskin name needs the desktop app.
+- SEO: robots.txt, sitemap.xml, Open Graph, and JSON-LD are included.
+  Set STUDIO_SITE_URL to your https origin so canonical/OG URLs are absolute.
 
 Local smoke check:
 
