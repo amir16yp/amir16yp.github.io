@@ -1,7 +1,7 @@
 {
-  "name": "Skin Studio",
-  "short_name": "Skin Studio",
-  "description": "Free Minecraft skin editor — paint in 3D in your browser.",
+  "name": "MC Studio",
+  "short_name": "mcstudio",
+  "description": "Free Minecraft skin and texture pack editor — paint in 3D in your browser.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#17181c",
