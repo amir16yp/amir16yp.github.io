@@ -2,7 +2,7 @@ Skin Studio — static web build
 ==============================
 
 Built with base URL: /mcstudio/
-Public site URL: (not set — re-run with STUDIO_SITE_URL=https://your.domain for full SEO)
+Public site URL: https://amir16yp.github.io/mcstudio
 
 Upload the *contents* of this folder to any static host
 (Netlify, Cloudflare Pages, GitHub Pages, S3, nginx, …).
