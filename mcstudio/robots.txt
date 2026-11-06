@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://amir16yp.github.io/mcstudio/sitemap.xml
